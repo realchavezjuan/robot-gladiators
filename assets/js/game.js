@@ -80,6 +80,14 @@ var startGame=function(){
         enemyHealth=50;
         fight(pickedEnemyName);
 
+        //if we're not at the last enemy in the array
+        if(playerHealth>0 && i<enemyNames.length -1){
+            //ask player if they want to shop
+            var shopConfirm=window.confirm("The fight is over, visit the store before the next round?");
+            if(shopConfirm){
+                shop();
+            }
+        }
         //play again
         //startGame();
     }
@@ -107,5 +115,57 @@ var endGame=function(){
     }
 }
 
+var shop = function(){
+    window.alert("welcome to the shop");
+
+    //ask player what they'd like to do
+    var shopOptionPrompt=window.prompt(
+    "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice."
+    );
+    
+    //choices
+    switch(shopOptionPrompt){
+        case "refill":
+        case "REFILL":
+            if(playerMoney>=7){
+                window.alert("Refilling player's health by 20 for 7 dollars.")
+            
+                //increase health decrease money
+                playerMoney=playerMoney-7;
+                playerHealth=playerHealth+20;
+                }
+            else{
+                window.alert("You don't have enough money.")
+            }
+        break;
+
+        case "upgrade":
+        case "UPGRADE":
+            if (playerMoney>=7){
+                window.alert("Upgrading player's atack by 6 for 7 dollars");
+
+                //decrease money upgrade attack
+                playerMoney=playerMoney-7;
+                playerAttack=playerAttack+6;
+            }
+            else{
+                window.alert("You don't have enough money.")
+            }
+        break;
+
+        case "leave":
+        case "LEAVE":
+            window.alert("Leaving store.");
+            //function ends
+        break;
+
+        default:
+            window.alert("You did not puck a valid option. Try again.");
+
+            //call shop again to force a valid option
+            shop();
+        break;
+    }
+}
 //start game
 startGame();
