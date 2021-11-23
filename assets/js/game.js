@@ -6,6 +6,7 @@ var randomNumber=function(min,max){
     return value;
 }
 
+//naming player
 var getPlayerName = function(){
     var name="";
     while(name==="" || name===null){
@@ -26,6 +27,7 @@ var playerInfo={
         this.money=10;
         this.attack=10;
     },
+    //refilling health
     refillHealth:function(){
         if(this.money>=7){
             window.alert("Refilling player's health by 20 for 7 dollars.");
@@ -36,11 +38,15 @@ var playerInfo={
             window.alert("You don't have enough money.");
         }
     },
+    //upgrading attack
     upgradeAttack:function(){
         if (this.money>=7){
             window.alert("Upgrading player's attack by 6 for 7 dollars.");
             this.attack+=6;
             this.money-=7;
+        }
+        else{
+            window.alert("You don't have enough money.");
         }
     }
 };
@@ -61,30 +67,37 @@ var enemyInfo=[
     }
 ];
 
-//console log with right code
-/*console.log(enemyNames);
-console.log(enemyNames.length);
-console.log(enemyNames[0]);
-console.log(enemyNames[3]);*/
+var fightOrSkip=function(){
+    var promptFight=window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+    if(!promptFight){
+        window.alert("You must enter a valid entry. Try again.");
+        return fightOrSkip();
+    }
+
+    //confirm skip
+    promptFight=promptFight.toLocaleLowerCase();
+    if (promptFight==="skip"){
+        window.alert(playerInfo.name+" has choosen to skip the fight.");
+        var confirmSkip=window.confirm("Are you sure you'd like to quit?");
+        if(confirmSkip){
+            window.alert(playerInfo.name+" has decided to skip this fight. Goodbye.");
+            playerInfo.money=playerInfo.money-10;
+            console.log("player money: ",playerInfo.money);
+            return true;
+        }
+        return false;
+    }
+
+}
 
 //fight function
 var fight=function(enemy){
     console.log(enemy);
     while(enemy.health>0&&playerInfo.health>0){
         //Ask user if they want to fight
-        var promptFight=window.prompt(
-            "Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose."
-        );
-        //user chooses to skip fight
-        if (promptFight==="skip"||promptFight==="SKIP"){
-            window.alert(playerInfo.name+" has choosen to skip the fight.");
-            var confirmSkip=window.confirm("Are you sure you'd like to quit?");
-            if(confirmSkip){
-                window.alert(playerInfo.name+" has decided to skip this fight. Goodbye.");
-                playerInfo.money=Max.math(0,playerInfo.money-10);
-                console.log("player money: ",playerInfo.money)
-                break;
-            }
+        if(fightOrSkip()){
+            //if true, leave fight by breaking loop
+            break;
         }
     
         //user chooses to fight
@@ -114,7 +127,7 @@ var fight=function(enemy){
             window.alert(playerInfo.name+" still has "+playerInfo.health+" health left.");
         }
     }
-};
+}
 
 //start game function
 var startGame=function(){
@@ -132,7 +145,6 @@ var startGame=function(){
             window.alert("You have lost your robot in battle. Gamer Over!");
             break;
         }
-        debugger;
         var pickedEnemyObj=enemyInfo[i];
         pickedEnemyObj.health=randomNumber(40,60);
         fight(pickedEnemyObj);
